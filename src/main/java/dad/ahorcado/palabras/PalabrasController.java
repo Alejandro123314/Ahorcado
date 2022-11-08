@@ -2,10 +2,13 @@ package dad.ahorcado.palabras;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 
 public class PalabrasController implements Initializable {
@@ -21,6 +25,7 @@ public class PalabrasController implements Initializable {
 	// model
 
 	private ListProperty<String> palabras = new SimpleListProperty<>(FXCollections.observableArrayList());
+	private StringProperty palabraSelecionada = new SimpleStringProperty();
 
 	// view
 
@@ -52,6 +57,7 @@ public class PalabrasController implements Initializable {
 		// bindings
 
 		palabrasList.itemsProperty().bind(palabras);
+		palabraSelecionada.bind(palabrasList.getSelectionModel().selectedItemProperty());
 
 	}
 
@@ -62,13 +68,16 @@ public class PalabrasController implements Initializable {
 	@FXML
 	void onNuevoAction(ActionEvent event) {
 
-		palabras.add("PALABRA");
+		TextInputDialog td = new TextInputDialog();
+		td.setHeaderText("Palabra a añadir");
+		Optional<String> palabra = td.showAndWait();
+		palabras.add(palabra.get());
 
 	}
 
 	@FXML
 	void onQuitarAction(ActionEvent event) {
-
+		palabras.remove(palabraSelecionada.getValue());
 	}
 
 	public final ListProperty<String> palabrasProperty() {

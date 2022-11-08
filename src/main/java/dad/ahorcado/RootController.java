@@ -1,10 +1,15 @@
 package dad.ahorcado;
 
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import dad.ahorcado.palabras.PalabrasController;
+import dad.ahorcado.partida.PartidaController;
+import dad.ahorcado.puntuaciones.PuntuacionesController;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -20,11 +25,13 @@ public class RootController implements Initializable {
 	// controllers
 	
 	private PalabrasController palabrasController = new PalabrasController(); 
+	private PuntuacionesController puntuacionesController = new PuntuacionesController();
+	private PartidaController partidaController = new PartidaController();
 	
 	// model
 	
 	private ListProperty<String> palabras = new SimpleListProperty<>(FXCollections.observableArrayList());
-	
+	private ListProperty<String> puntuaciones = new SimpleListProperty<>(FXCollections.observableArrayList());
 	// view
 	
 	@FXML
@@ -33,7 +40,9 @@ public class RootController implements Initializable {
 	@FXML 
 	private Tab partidaTab, palabrasTab, puntuacionesTab;
 	
-	public RootController() {
+	public RootController(List<String> palabras2, List<String> puntuaciones2) {
+		this.palabras.addAll(palabras2);
+		this.puntuaciones.addAll(puntuaciones2);
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/RootView.fxml"));
 			loader.setController(this);
@@ -47,10 +56,17 @@ public class RootController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		palabrasTab.setContent(palabrasController.getView());
+		puntuacionesTab.setContent(puntuacionesController.getView());
+		partidaTab.setContent(partidaController.getView());
 		
 		// bindings
 		
 		palabrasController.palabrasProperty().bind(palabras);
+		puntuacionesController.puntuacionesProperty().bindBidirectional(puntuaciones);
+		partidaController.puntuacionesProperty().bindBidirectional(puntuaciones);
+		
+		partidaController.setPalabraAdivinar(palabras.get(new Random().nextInt(palabras.size())));
+		
 		
 	}
 	
@@ -70,6 +86,20 @@ public class RootController implements Initializable {
 
 	public final void setPalabras(final ObservableList<String> palabras) {
 		this.palabrasProperty().set(palabras);
+	}
+	
+	public final ListProperty<String> puntuacionesProperty() {
+		return this.puntuaciones;
+	}
+	
+
+	public final ObservableList<String> getPuntuaciones() {
+		return this.puntuacionesProperty().get();
+	}
+	
+
+	public final void setPuntuaciones(final ObservableList<String> puntuaciones) {
+		this.puntuacionesProperty().set(puntuaciones);
 	}
 
 }
