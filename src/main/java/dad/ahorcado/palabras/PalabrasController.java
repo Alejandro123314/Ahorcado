@@ -21,7 +21,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 
 public class PalabrasController implements Initializable {
-
+	
 	// model
 
 	private ListProperty<String> palabras = new SimpleListProperty<>(FXCollections.observableArrayList());

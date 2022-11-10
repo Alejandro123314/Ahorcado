@@ -1,6 +1,5 @@
 package dad.ahorcado;
 
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -52,6 +51,8 @@ public class RootController implements Initializable {
 		}
 	}
 
+	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -67,8 +68,14 @@ public class RootController implements Initializable {
 		
 		partidaController.setPalabraAdivinar(palabras.get(new Random().nextInt(palabras.size())));
 		
+		if(partidaController.isActualiza()==true) {
+			partidaController.setPalabraAdivinar(palabras.get(new Random().nextInt(palabras.size())));
+			partidaController.setActualiza(false);
+		}
+		
 		
 	}
+	
 	
 	public TabPane getView() {
 		return view;
